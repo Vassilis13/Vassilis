@@ -1,0 +1,121 @@
+def galgen()
+
+import random
+
+# Liste von Wörtern für das Spiel
+woerter = ['python', 'programmierung', 'computer', 'spiel', 'lernen', 'entwicklung', 'code']
+
+# Funktion zur Auswahl eines zufälligen Wortes aus der Liste
+def zufaelliges_wort(woerter):
+    return random.choice(woerter)
+
+# Funktion zur Anzeige des aktuellen Spielstands (Galgenmännchen)
+def anzeigen(galgenzaehler, geheimes_wort, geratene_buchstaben):
+    print("\nGalgenmännchen:")
+    bilder = [
+        """
+           ------
+           |    |
+           |
+           |
+           |
+           |
+        --------""",
+        """
+           ------
+           |    |
+           |    O
+           |
+           |
+           |
+        --------""",
+        """
+           ------
+           |    |
+           |    O
+           |    |
+           |
+           |
+        --------""",
+        """
+           ------
+           |    |
+           |    O
+           |   /|
+           |
+           |
+        --------""",
+        """
+           ------
+           |    |
+           |    O
+           |   /|\\
+           |
+           |
+        --------""",
+        """
+           ------
+           |    |
+           |    O
+           |   /|\\
+           |   /
+           |
+        --------""",
+        """
+           ------
+           |    |
+           |    O
+           |   /|\\
+           |   / \\
+           |
+        --------"""]
+    print(bilder[galgenzaehler])
+    print("\nGeheimes Wort:", " ".join(geheimes_wort))
+    print("Bereits geratene Buchstaben:", " ".join(geratene_buchstaben))
+
+# Funktion zum Eingeben eines Buchstabens durch den Spieler
+def buchstabe_eingeben(bereits_eingegebene_buchstaben):
+    while True:
+        eingabe = input("Rate einen Buchstaben: ").lower()
+        if len(eingabe) != 1:
+            print("Bitte geben Sie nur einen Buchstaben ein.")
+        elif not eingabe.isalpha():
+            print("Bitte geben Sie einen Buchstaben ein.")
+        elif eingabe in bereits_eingegebene_buchstaben:
+            print("Sie haben diesen Buchstaben bereits geraten. Versuchen Sie es erneut.")
+        else:
+            return eingabe
+
+# Funktion zum Aktualisieren des geheimen Wortes basierend auf dem geratenen Buchstaben
+def aktualisieren_geheimes_wort(geheimes_wort, zu_ergaenzende_stellen, buchstabe):
+    for i, char in enumerate(zu_ergaenzende_stellen):
+        if char == buchstabe:
+            geheimes_wort[i] = buchstabe
+
+# Hauptfunktionsaufruf für das Spiel
+def galgenmaennchen():
+    galgenzaehler = 0
+    geheimes_wort = list(zufaelliges_wort(woerter))
+    geratene_buchstaben = []
+    zu_ergaenzende_stellen = ['_' for _ in geheimes_wort]
+
+    while galgenzaehler < len(bilder) - 1:
+        anzeigen(galgenzaehler, zu_ergaenzende_stellen, geratene_buchstaben)
+        buchstabe = buchstabe_eingeben(geratene_buchstaben)
+        geratene_buchstaben.append(buchstabe)
+
+        if buchstabe in geheimes_wort:
+            aktualisieren_geheimes_wort(zu_ergaenzende_stellen, geheimes_wort, buchstabe)
+            if '_' not in zu_ergaenzende_stellen:
+                anzeigen(galgenzaehler, zu_ergaenzende_stellen, geratene_buchstaben)
+                print("Glückwunsch! Sie haben das Wort erraten!")
+                break
+        else:
+            galgenzaehler += 1
+
+    else:
+        anzeigen(galgenzaehler, zu_ergaenzende_stellen, geratene_buchstaben)
+        print("Oh nein! Sie haben alle Versuche aufgebraucht. Das geheime Wort war:", "".join(geheimes_wort))
+
+if __name__ == '__Test__':
+    galgen()
